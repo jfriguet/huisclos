@@ -6,20 +6,20 @@ import Feed from '../components/Feed'
 import { CATEGORIES, SUBCATEGORIES, HOTELS, EVENTS } from '../lib/data'
 
 export default function Home() {
-  const [activeExp, setActiveExp] = useState('all')
-  const [activeSub, setActiveSub] = useState('all')
-  const [activeAccess, setActiveAccess] = useState('all')
-  const [activeType, setActiveType] = useState('all')
-  const [activeHotel, setActiveHotel] = useState('all')
+  const [activeExp, setActiveExp] = useState<string>('all')
+  const [activeSub, setActiveSub] = useState<string>('all')
+  const [activeAccess, setActiveAccess] = useState<string>('all')
+  const [activeType, setActiveType] = useState<string>('all')
+  const [activeHotel, setActiveHotel] = useState<string>('all')
 
-  const handleSetExp = (exp) => {
+  const handleSetExp = (exp: string) => {
     setActiveExp(exp)
     setActiveSub('all')
   }
 
-  const getEvDay = useCallback((d) => {
+  const getEvDay = useCallback((d: Date) => {
     const dow = d.getDay()
-    return EVENTS.filter(ev => {
+    return EVENTS.filter((ev: any) => {
       if (activeExp !== 'all' && ev.exp !== activeExp) return false
       if (activeSub !== 'all' && ev.sub !== activeSub) return false
       if (activeAccess !== 'all' && ev.access !== activeAccess) return false
@@ -31,7 +31,7 @@ export default function Home() {
     })
   }, [activeExp, activeSub, activeAccess, activeType, activeHotel])
 
-  const subs = SUBCATEGORIES[activeExp] || []
+  const subs: string[] = (SUBCATEGORIES as Record<string, string[]>)[activeExp] || []
 
   return (
     <div className="page-wrapper">
@@ -41,7 +41,6 @@ export default function Home() {
         categories={CATEGORIES}
       />
 
-      {/* Sous-filtres */}
       {subs.length > 0 && (
         <div style={{
           display: 'flex',
@@ -49,13 +48,13 @@ export default function Home() {
           background: '#F8F8F8',
           overflowX: 'auto'
         }}>
-          {['Tout', ...subs].map((s, i) => {
+          {['Tout', ...subs].map((s: string, i: number) => {
             const key = i === 0 ? 'all' : s
             return (
               <button key={key} onClick={() => setActiveSub(key)} style={{
                 fontSize: '10px',
                 letterSpacing: '0.1em',
-                textTransform: 'uppercase',
+                textTransform: 'uppercase' as const,
                 padding: '9px 18px',
                 background: 'transparent',
                 border: 'none',
@@ -63,7 +62,7 @@ export default function Home() {
                 cursor: 'pointer',
                 color: activeSub === key ? 'var(--blue)' : 'var(--gris)',
                 fontWeight: activeSub === key ? 500 : 400,
-                whiteSpace: 'nowrap',
+                whiteSpace: 'nowrap' as const,
               }}>
                 {s}
               </button>
