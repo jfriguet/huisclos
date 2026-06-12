@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;700&family=Barlow+Condensed:wght@600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --white: #FFFFFF;
+  --blue: #4A7FD4;
+  --blue-pale: #EEF4FF;
+  --noir: #0A0A0A;
+  --gris: #888888;
+  --gris-light: #DDDDDD;
+  --border: rgba(0, 0, 0, 0.08);
+}
+
+html, body {
+  background: var(--white);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+.page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  min-height: 100vh;
+}
+body {
+  background: #E8E4DE;
+}
+
+.page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--white);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  min-height: 100vh;
+}
