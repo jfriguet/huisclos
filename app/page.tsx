@@ -1,9 +1,10 @@
 'use client'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Feed from '../components/Feed'
-import { CATEGORIES, SUBCATEGORIES, HOTELS, EVENTS } from '../lib/data'
+import { CATEGORIES, SUBCATEGORIES, HOTELS } from '../lib/data'
+import { supabase } from '../lib/supabase'
 
 export default function Home() {
   const [activeExp, setActiveExp] = useState<string>('all')
@@ -11,6 +12,20 @@ export default function Home() {
   const [activeAccess, setActiveAccess] = useState<string>('all')
   const [activeType, setActiveType] = useState<string>('all')
   const [activeHotel, setActiveHotel] = useState<string>('all')
+  const [events, setEvents] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadEvents() {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+      if (error) console.error(error)
+      else setEvents(data || [])
+      setLoading(false)
+    }
+    loadEvents()
+  }, [])
 
   const handleSetExp = (exp: string) => {
     setActiveExp(exp)
@@ -19,19 +34,32 @@ export default function Home() {
 
   const getEvDay = useCallback((d: Date) => {
     const dow = d.getDay()
-    return EVENTS.filter((ev: any) => {
+    return events.filter((ev: any) => {
       if (activeExp !== 'all' && ev.exp !== activeExp) return false
       if (activeSub !== 'all' && ev.sub !== activeSub) return false
       if (activeAccess !== 'all' && ev.access !== activeAccess) return false
-      if (activeHotel !== 'all' && ev.hotelKey !== activeHotel) return false
+      if (activeHotel !== 'all' && ev.hotel_key !== activeHotel) return false
       if (activeType === 'recurrent' && !ev.recurrent) return false
       if (activeType === 'oneshot' && ev.recurrent) return false
-      if (ev.recurrent) return ev.days.includes(dow)
+      if (ev.recurrent) return ev.days && ev.days.includes(dow)
       return ev.date === d.toISOString().split('T')[0]
     })
-  }, [activeExp, activeSub, activeAccess, activeType, activeHotel])
+  }, [events, activeExp, activeSub, activeAccess, activeType, activeHotel])
 
   const subs: string[] = (SUBCATEGORIES as Record<string, string[]>)[activeExp] || []
+
+  if (loading) return (
+    <div style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      height: '100vh',
+      fontFamily: "'Barlow Condensed', sans-serif",
+      fontSize: '24px', fontWeight: 700,
+      letterSpacing: '0.1em', textTransform: 'uppercase',
+      color: 'var(--gris)',
+    }}>
+      Chargement...
+    </div>
+  )
 
   return (
     <div className="page-wrapper">

@@ -49,7 +49,7 @@ function EventPopup({ ev, onClose }) {
               fontSize: '28px', fontWeight: 800,
               textTransform: 'uppercase', color: 'white',
               letterSpacing: '0.03em', lineHeight: 1,
-            }}>{ev.hotel}</div>
+            }}>{ev.hotel_name}</div>
             <div style={{
               fontFamily: "'Cormorant Garamond', serif",
               fontSize: '17px', fontStyle: 'italic',
@@ -65,7 +65,7 @@ function EventPopup({ ev, onClose }) {
 
         <div style={{ padding: '20px 24px' }}>
           {[
-            { label: 'Horaires', value: ev.time, big: true },
+            { label: 'Horaires', value: ev.time_range, big: true },
             { label: 'Tarif', value: ev.price },
             { label: 'Accès', value: ACCESS_LABELS[ev.access] },
             { label: 'Type', value: ev.recurrent ? '↻ Récurrent' : '✦ One shot' },
@@ -79,7 +79,8 @@ function EventPopup({ ev, onClose }) {
             }}>
               <span style={{
                 fontSize: '9px', letterSpacing: '0.2em',
-                textTransform: 'uppercase', color: 'var(--gris)', fontWeight: 500,
+                textTransform: 'uppercase',
+                color: 'var(--gris)', fontWeight: 500,
               }}>{row.label}</span>
               <span style={{
                 fontFamily: row.big ? "'Barlow Condensed', sans-serif" : "'Inter', sans-serif",
@@ -112,8 +113,8 @@ function EventRow({ ev, onSelect }) {
   return (
     <div
       onClick={() => onSelect(ev)}
-      onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
-      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+      onMouseEnter={e => (e.currentTarget.style.background = '#FAFAFA')}
+      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
       style={{
         display: 'grid', gridTemplateColumns: '100px 1fr auto',
         padding: '16px 20px',
@@ -129,7 +130,7 @@ function EventRow({ ev, onSelect }) {
         color: 'var(--blue)', letterSpacing: '0.04em',
         paddingTop: '2px',
       }}>
-        {ev.time}
+        {ev.time_range}
       </div>
       <div>
         <div style={{
@@ -138,7 +139,7 @@ function EventRow({ ev, onSelect }) {
           textTransform: 'uppercase', color: 'var(--noir)',
           letterSpacing: '0.03em', lineHeight: 1, marginBottom: '3px',
         }}>
-          {ev.hotel}
+          {ev.hotel_name}
         </div>
         <div style={{
           fontFamily: "'Cormorant Garamond', serif",
@@ -210,7 +211,8 @@ function DayBlock({ d, evs, isToday, idx, onSelect }) {
             </div>
             <div style={{
               fontSize: '10px', letterSpacing: '0.18em',
-              textTransform: 'uppercase', color: 'var(--gris)', marginTop: '3px',
+              textTransform: 'uppercase',
+              color: 'var(--gris)', marginTop: '3px',
             }}>
               {MONTHS[d.getMonth()]} {d.getFullYear()}
             </div>
