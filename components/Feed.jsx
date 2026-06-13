@@ -67,9 +67,9 @@ function EventPopup({ ev, onClose }) {
           {[
             { label: 'Horaires', value: ev.time_range, big: true },
             { label: 'Tarif', value: ev.price },
-            { label: 'Accès', value: ACCESS_LABELS[ev.access] },
-            { label: 'Type', value: ev.recurrent ? '↻ Récurrent' : '✦ One shot' },
-            { label: 'Catégorie', value: ev.exp?.charAt(0).toUpperCase() + ev.exp?.slice(1) },
+            { label: 'Acces', value: ACCESS_LABELS[ev.access] },
+            { label: 'Type', value: ev.recurrent ? 'Recurrent' : 'One shot' },
+            { label: 'Categorie', value: ev.exp ? ev.exp.charAt(0).toUpperCase() + ev.exp.slice(1) : '' },
           ].map((row, i) => (
             <div key={i} style={{
               display: 'flex', justifyContent: 'space-between',
@@ -93,16 +93,20 @@ function EventPopup({ ev, onClose }) {
         </div>
 
         <div style={{ padding: '0 24px 24px' }}>
-          <button onClick={onClose} style={{
-            width: '100%', padding: '14px',
-            background: 'var(--blue)', color: 'white',
-            border: 'none', cursor: 'pointer',
-            fontFamily: "'Barlow Condensed', sans-serif",
-            fontSize: '14px', fontWeight: 700,
-            letterSpacing: '0.14em', textTransform: 'uppercase',
-          }}>
-            Voir sur le site de l'hôtel →
-          </button>
+          <div
+            onClick={() => { window.location.href = '/hotel/' + ev.hotel_key }}
+            style={{
+              display: 'block', width: '100%', padding: '14px',
+              background: 'var(--blue)', color: 'white',
+              fontFamily: "'Barlow Condensed', sans-serif",
+              fontSize: '14px', fontWeight: 700,
+              letterSpacing: '0.14em', textTransform: 'uppercase',
+              textAlign: 'center', cursor: 'pointer',
+              boxSizing: 'border-box',
+            }}
+          >
+            Voir la fiche hotel
+          </div>
         </div>
       </div>
     </>
@@ -151,7 +155,7 @@ function EventRow({ ev, onSelect }) {
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
           <span style={tagStyle(ev.access)}>{ACCESS_LABELS[ev.access]}</span>
           <span style={tagStyle(ev.recurrent ? 'rec' : 'one')}>
-            {ev.recurrent ? '↻ Récurrent' : '✦ One shot'}
+            {ev.recurrent ? 'Recurrent' : 'One shot'}
           </span>
         </div>
       </div>
@@ -165,15 +169,14 @@ function EventRow({ ev, onSelect }) {
     </div>
   )
 }
-
 function DayBlock({ d, evs, isToday, idx, onSelect }) {
   const editorial = EDITORIAL_BLOCKS[idx]
   const dateKey = d.toISOString().split('T')[0]
 
   return (
-    <>
+    <div>
       <div
-        id={`day-${dateKey}`}
+        id={'day-' + dateKey}
         style={{
           margin: '16px',
           border: '2px solid var(--noir)',
@@ -239,7 +242,9 @@ function DayBlock({ d, evs, isToday, idx, onSelect }) {
             Aucun moment ce jour
           </div>
         ) : (
-          evs.map((ev, i) => <EventRow key={i} ev={ev} onSelect={onSelect} />)
+          evs.map((ev, i) => (
+            <EventRow key={i} ev={ev} onSelect={onSelect} />
+          ))
         )}
       </div>
 
@@ -273,7 +278,7 @@ function DayBlock({ d, evs, isToday, idx, onSelect }) {
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }
 
@@ -307,7 +312,7 @@ export default function Feed({ getEvDay }) {
   })
 
   return (
-    <>
+    <div>
       <div
         ref={feedRef}
         style={{
@@ -332,6 +337,6 @@ export default function Feed({ getEvDay }) {
       {selectedEv && (
         <EventPopup ev={selectedEv} onClose={() => setSelectedEv(null)} />
       )}
-    </>
+    </div>
   )
 }
